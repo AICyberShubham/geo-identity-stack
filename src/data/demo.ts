@@ -40,7 +40,7 @@ function ring(cx: number, cz: number, w: number, d: number): [number, number][] 
   ];
 }
 
-export const SURROUNDING_PARCELS: Parcel[] = [
+const SURROUNDING_DEFS: { c: [number, number]; s: [number, number]; id: string }[] = [
   { c: [-70, -60], s: [40, 34], id: "UP-LKO-P123441" },
   { c: [-18, -66], s: [42, 30], id: "UP-LKO-P123442" },
   { c: [34, -62], s: [36, 32], id: "UP-LKO-P123443" },
@@ -51,7 +51,9 @@ export const SURROUNDING_PARCELS: Parcel[] = [
   { c: [-78, 26], s: [36, 40], id: "UP-LKO-P123448" },
   { c: [-74, -8], s: [34, 26], id: "UP-LKO-P123449" },
   { c: [66, 88], s: [34, 28], id: "UP-LKO-P123450" },
-].map((p, i) => ({
+];
+
+export const SURROUNDING_PARCELS: Parcel[] = SURROUNDING_DEFS.map((p, i) => ({
   id: p.id,
   name: `Adjacent Holding ${i + 1}`,
   state: STATE,
@@ -118,12 +120,12 @@ export const FLOORS: Floor[] = FLOOR_DEFS.map((def) => {
   if (isApartmentFloor) {
     for (let u = 0; u < 2; u++) {
       const unitNumber = `U${String(def.number * 2 - 1 + u).padStart(2, "0")}`;
-      const owner = OWNERS[ownerIdx++ % OWNERS.length];
+      const owner = OWNERS[ownerIdx++ % OWNERS.length]!;
       units.push({
         id: `${floorCode(def.number)}-${unitNumber}`,
         floorId: id,
         unitNumber,
-        area: [1180, 1240, 1310, 1420][(def.number + u) % 4],
+        area: [1180, 1240, 1310, 1420][(def.number + u) % 4]!,
         owner,
         zMin: def.zMin,
         zMax: def.zMax,

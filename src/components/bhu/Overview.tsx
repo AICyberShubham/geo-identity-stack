@@ -68,7 +68,7 @@ export function Overview() {
 
       <div className="grid grid-cols-2 gap-3 md:grid-cols-3 xl:grid-cols-6">
         {OVERVIEW_STATS.map((s, i) => (
-          <StatsCard key={s.label} {...s} Icon={ICONS[i]} />
+          <StatsCard key={s.label} {...s} Icon={ICONS[i]!} />
         ))}
       </div>
 

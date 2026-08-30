@@ -17,7 +17,7 @@ function ParcelOutline({
 }) {
   const pts = useMemo(
     () =>
-      [...points, points[0]].map(([x, z]) => [x, y, z] as [number, number, number]),
+      [...points, points[0]!].map((pt) => [pt[0], y, pt[1]] as [number, number, number]),
     [points, y],
   );
   return <Line points={pts} color={color} lineWidth={width} />;
@@ -45,7 +45,6 @@ export function Ground() {
       <gridHelper
         args={[420, 84, P.gridStrong, P.grid]}
         position={[0, 0.01, 0]}
-        // @ts-expect-error material props are valid on the helper's material
         material-transparent
         material-opacity={showUnderground ? 0.18 : 0.42}
       />
@@ -60,7 +59,8 @@ export function Ground() {
       {/* roads */}
       {layers.roads &&
         ROADS.map((r) => {
-          const [a, b] = r.points;
+          const a = r.points[0]!;
+          const b = r.points[1]!;
           const horizontal = a[1] === b[1];
           const length = horizontal ? Math.abs(b[0] - a[0]) : Math.abs(b[1] - a[1]);
           const cx = (a[0] + b[0]) / 2;

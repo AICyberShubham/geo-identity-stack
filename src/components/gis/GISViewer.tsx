@@ -9,7 +9,7 @@ import { PRIMARY_PARCEL } from "@/data/demo";
 import { P } from "@/lib/palette";
 import { useBhu } from "@/state/bhu";
 
-const PRESETS: Record<string, [number, number, number]> = {
+const PRESETS: Record<"reset" | "top" | "side" | "iso", [number, number, number]> = {
   reset: [46, 34, 58],
   top: [0.01, 96, 0.01],
   side: [92, 12, 0],
@@ -24,8 +24,8 @@ function CameraRig() {
   const desiredTarget = useRef(new THREE.Vector3(0, 6, 0));
 
   useEffect(() => {
-    const p = PRESETS[cameraPreset.preset] ?? PRESETS.reset;
-    desiredPos.current.set(...p);
+    const p: [number, number, number] = PRESETS[cameraPreset.preset] ?? PRESETS.reset;
+    desiredPos.current.set(p[0], p[1], p[2]);
     desiredTarget.current.set(0, cameraPreset.preset === "top" ? 0 : 6, 0);
   }, [cameraPreset]);
 
@@ -34,7 +34,7 @@ function CameraRig() {
       desiredPos.current.set(0.01, 96, 0.01);
       desiredTarget.current.set(0, 0, 0);
     } else {
-      desiredPos.current.set(...PRESETS.iso);
+      desiredPos.current.set(PRESETS.iso[0], PRESETS.iso[1], PRESETS.iso[2]);
       desiredTarget.current.set(0, 8, 0);
     }
   }, [view]);

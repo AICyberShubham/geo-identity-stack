@@ -39,7 +39,7 @@ export function SearchPanel() {
     for (const f of FLOORS) {
       if (f.label.toLowerCase().includes(term) || f.id.toLowerCase().includes(term)) {
         out.push({
-          id: f.units[0].id,
+          id: f.units[0]!.id,
           title: f.label,
           sub: `${f.id} · Z ${f.zMin}m – ${f.zMax}m`,
           kind: "floor",

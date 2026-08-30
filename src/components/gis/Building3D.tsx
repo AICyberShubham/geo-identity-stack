@@ -224,13 +224,13 @@ export function Building3D() {
                     castShadow
                     onClick={(e) => {
                       e.stopPropagation();
-                      select({ kind: "unit", id: floor.units[0].id });
+                      select({ kind: "unit", id: floor.units[0]!.id });
                     }}
                   >
                     <boxGeometry args={[W * 0.34, 1.8, D * 0.4]} />
                     <meshStandardMaterial
                       color={
-                        selection.id === floor.units[0].id ? P.primary : P.facadeLight
+                        selection.id === floor.units[0]!.id ? P.primary : P.facadeLight
                       }
                       roughness={0.7}
                     />
@@ -239,8 +239,8 @@ export function Building3D() {
                   {[
                     [0, D / 2],
                     [0, -D / 2],
-                  ].map(([x, z], i) => (
-                    <mesh key={i} position={[x, floor.zMin + 0.55, z]}>
+                  ].map((pos, i) => (
+                    <mesh key={i} position={[pos[0]!, floor.zMin + 0.55, pos[1]!]}>
                       <boxGeometry args={[W + 0.9, 0.9, 0.16]} />
                       <meshStandardMaterial color={P.slab} transparent opacity={0.7} />
                     </mesh>
@@ -258,7 +258,7 @@ export function Building3D() {
             }
 
             if (isBasement) {
-              const u = floor.units[0];
+              const u = floor.units[0]!;
               const sel = selection.id === u.id;
               return (
                 <group key={floor.id}>
