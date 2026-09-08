@@ -1,5 +1,5 @@
 import { Boxes, Cpu, EyeOff, Layers, Eye } from "lucide-react";
-import { useState } from "react";
+import { useEffect, useState } from "react";
 import { Button } from "@/components/ui/button";
 import { CameraControls } from "./CameraControls";
 import { ConflictModal } from "./ConflictModal";
@@ -34,12 +34,18 @@ function ViewToggle() {
 }
 
 export function Workspace() {
-  const { view, showUnderground, setShowUnderground, layers } = useBhu();
+  const { view, showUnderground, setShowUnderground, layers, selection } = useBhu();
   const [extracting, setExtracting] = useState(false);
   // on small screens the stacked panel would cover the map, so start collapsed
   const [panelOpen, setPanelOpen] = useState(
     () => typeof window === "undefined" || window.innerWidth >= 1280,
   );
+
+  // selecting anything in the scene should always reveal its details
+  useEffect(() => {
+    if (selection.id) setPanelOpen(true);
+  }, [selection.id, selection.kind]);
+
 
   return (
     <div className="relative flex min-h-0 flex-1">
