@@ -109,6 +109,8 @@ function SceneLights() {
         position={[48, 62, 34]}
         intensity={1.35}
         castShadow
+        shadow-bias={-0.0006}
+        shadow-normalBias={0.04}
         shadow-mapSize-width={1024}
         shadow-mapSize-height={1024}
         shadow-camera-left={-70}
@@ -153,9 +155,9 @@ export function GISViewer() {
     <Canvas
       shadows
       dpr={[1, 2]}
-      camera={{ position: PRESETS.reset, fov: 42, near: 0.5, far: 1200 }}
+      camera={{ position: PRESETS.reset, fov: 42, near: 1, far: 900 }}
       onPointerMissed={() => select({ kind: null, id: null })}
-      gl={{ antialias: true }}
+      gl={{ antialias: true, logarithmicDepthBuffer: true }}
     >
       <color attach="background" args={[P.bg]} />
       <fog attach="fog" args={[P.bg, 150, 340]} />
