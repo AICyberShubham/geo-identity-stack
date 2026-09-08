@@ -22,11 +22,15 @@ function CameraRig() {
   const { cameraPreset, focus, view } = useBhu();
   const desiredPos = useRef(new THREE.Vector3(...PRESETS.reset));
   const desiredTarget = useRef(new THREE.Vector3(0, 6, 0));
+  // only animate when an explicit request (preset / view / focus) happens
+  const animating = useRef(false);
+  const first = useRef(true);
 
   useEffect(() => {
     const p: [number, number, number] = PRESETS[cameraPreset.preset] ?? PRESETS.reset;
     desiredPos.current.set(p[0], p[1], p[2]);
     desiredTarget.current.set(0, cameraPreset.preset === "top" ? 0 : 6, 0);
+    animating.current = true;
   }, [cameraPreset]);
 
   useEffect(() => {
@@ -37,6 +41,7 @@ function CameraRig() {
       desiredPos.current.set(PRESETS.iso[0], PRESETS.iso[1], PRESETS.iso[2]);
       desiredTarget.current.set(0, 8, 0);
     }
+    animating.current = true;
   }, [view]);
 
   useEffect(() => {
@@ -44,26 +49,48 @@ function CameraRig() {
     const [x, y, z] = focus.target;
     desiredTarget.current.set(x, y, z);
     desiredPos.current.set(x + focus.distance * 0.7, y + focus.distance * 0.55, z + focus.distance * 0.8);
+    animating.current = true;
   }, [focus]);
 
   useFrame((_, delta) => {
+    if (first.current) {
+      first.current = false;
+      animating.current = true;
+    }
+    if (!animating.current) return;
     const k = 1 - Math.exp(-3.4 * Math.min(delta, 0.05));
     camera.position.lerp(desiredPos.current, k);
     if (controls.current) {
       controls.current.target.lerp(desiredTarget.current, k);
       controls.current.update();
     }
+    // stop as soon as we're close enough, so the user keeps full control
+    if (
+      camera.position.distanceTo(desiredPos.current) < 0.35 &&
+      (!controls.current || controls.current.target.distanceTo(desiredTarget.current) < 0.2)
+    ) {
+      animating.current = false;
+    }
   });
 
   return (
     <OrbitControls
       ref={controls}
+      makeDefault
       enableDamping
-      dampingFactor={0.08}
-      minDistance={18}
-      maxDistance={220}
-      maxPolarAngle={Math.PI / 2.05}
+      dampingFactor={0.075}
+      rotateSpeed={0.85}
+      zoomSpeed={0.9}
+      panSpeed={0.8}
+      enablePan
+      screenSpacePanning
+      minDistance={10}
+      maxDistance={320}
+      minPolarAngle={0.02}
+      maxPolarAngle={Math.PI - 0.02}
       onStart={() => {
+        // user took over: cancel any programmatic motion instantly
+        animating.current = false;
         desiredPos.current.copy(camera.position);
         if (controls.current) desiredTarget.current.copy(controls.current.target);
       }}
