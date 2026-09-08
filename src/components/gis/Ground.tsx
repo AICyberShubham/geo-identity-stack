@@ -91,6 +91,8 @@ export function Ground() {
                 />
                 <meshStandardMaterial
                   color={P.road}
+                  emissive={P.road}
+                  emissiveIntensity={view === "2d" ? 0.9 : 0}
                   roughness={1}
                   transparent
                   opacity={groundOpacity}
@@ -134,7 +136,7 @@ export function Ground() {
                   <meshBasicMaterial
                     color={P.parcel}
                     transparent
-                    opacity={view === "2d" ? 0.14 : 0.05}
+                    opacity={view === "2d" ? 0.22 : 0.05}
                     depthWrite={false}
                   />
                 </mesh>
