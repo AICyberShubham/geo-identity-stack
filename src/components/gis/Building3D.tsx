@@ -306,14 +306,38 @@ export function Building3D() {
                       roughness={0.7}
                     />
                   </mesh>
-                  {/* parapet */}
+                  {/* roof deck */}
+                  <mesh position={[0, floor.zMin + 0.13, 0]} receiveShadow>
+                    <boxGeometry args={[W + 0.7, 0.06, D + 0.7]} />
+                    <meshStandardMaterial color={P.roofDeck} roughness={0.95} />
+                  </mesh>
+                  {/* parapet on all four edges */}
                   {[
-                    [0, D / 2],
-                    [0, -D / 2],
-                  ].map((pos, i) => (
-                    <mesh key={i} position={[pos[0]!, floor.zMin + 0.55, pos[1]!]}>
-                      <boxGeometry args={[W + 0.9, 0.9, 0.16]} />
-                      <meshStandardMaterial color={P.slab} transparent opacity={0.7} />
+                    [0, D / 2, W + 0.9, 0.16],
+                    [0, -D / 2, W + 0.9, 0.16],
+                    [W / 2, 0, 0.16, D + 0.9],
+                    [-W / 2, 0, 0.16, D + 0.9],
+                  ].map((p, i) => (
+                    <mesh key={i} position={[p[0]!, floor.zMin + 0.55, p[1]!]} castShadow>
+                      <boxGeometry args={[p[2]!, 0.9, p[3]!]} />
+                      <meshStandardMaterial color={P.trim} roughness={0.9} />
+                    </mesh>
+                  ))}
+                  {/* water tanks + AC units */}
+                  {[-1, 1].map((s) => (
+                    <mesh key={s} position={[s * W * 0.3, floor.zMin + 1.5, D * 0.28]} castShadow>
+                      <cylinderGeometry args={[1, 1.1, 1.6, 12]} />
+                      <meshStandardMaterial color={P.waterTank} roughness={0.6} />
+                    </mesh>
+                  ))}
+                  {[-1.4, 0, 1.4].map((s) => (
+                    <mesh
+                      key={s}
+                      position={[s * 2, floor.zMin + 0.55, -D * 0.3]}
+                      castShadow
+                    >
+                      <boxGeometry args={[1.2, 0.8, 0.9]} />
+                      <meshStandardMaterial color={P.railing} metalness={0.5} roughness={0.5} />
                     </mesh>
                   ))}
                   <mesh position={[W * 0.34, floor.zMin + 1.4, -D * 0.28]}>
