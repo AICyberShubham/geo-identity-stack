@@ -240,7 +240,7 @@ function FloorSlab({ y }: { y: number }) {
   return (
     <mesh position={[0, y, 0]} receiveShadow castShadow>
       <boxGeometry args={[W + 0.9, 0.22, D + 0.9]} />
-      <meshStandardMaterial color={P.slab} roughness={0.85} metalness={0.1} />
+      <meshStandardMaterial color={P.trim} roughness={0.92} metalness={0.05} />
     </mesh>
   );
 }
