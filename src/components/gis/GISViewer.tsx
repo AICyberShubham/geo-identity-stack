@@ -54,6 +54,7 @@ function CameraRig() {
   }, [focus]);
 
   useFrame((_, delta) => {
+    (window as any).__cam = camera.position.toArray();
     if (first.current) {
       first.current = false;
       animating.current = true;
