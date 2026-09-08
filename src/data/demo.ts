@@ -40,17 +40,21 @@ function ring(cx: number, cz: number, w: number, d: number): [number, number][] 
   ];
 }
 
+/**
+ * Blocks are laid out so no holding overlaps a road corridor:
+ * roads occupy z 35..45, z -46..-38 and x -49..-41.
+ */
 const SURROUNDING_DEFS: { c: [number, number]; s: [number, number]; id: string }[] = [
-  { c: [-70, -60], s: [40, 34], id: "UP-LKO-P123441" },
-  { c: [-18, -66], s: [42, 30], id: "UP-LKO-P123442" },
-  { c: [34, -62], s: [36, 32], id: "UP-LKO-P123443" },
-  { c: [78, -18], s: [38, 40], id: "UP-LKO-P123444" },
-  { c: [76, 40], s: [40, 36], id: "UP-LKO-P123445" },
-  { c: [22, 74], s: [44, 32], id: "UP-LKO-P123446" },
-  { c: [-32, 72], s: [40, 30], id: "UP-LKO-P123447" },
-  { c: [-78, 26], s: [36, 40], id: "UP-LKO-P123448" },
-  { c: [-74, -8], s: [34, 26], id: "UP-LKO-P123449" },
-  { c: [66, 88], s: [34, 28], id: "UP-LKO-P123450" },
+  { c: [-72, -66], s: [40, 26], id: "UP-LKO-P123441" },
+  { c: [-14, -66], s: [42, 26], id: "UP-LKO-P123442" },
+  { c: [36, -66], s: [36, 26], id: "UP-LKO-P123443" },
+  { c: [-74, -14], s: [36, 36], id: "UP-LKO-P123444" },
+  { c: [-74, 20], s: [36, 24], id: "UP-LKO-P123445" },
+  { c: [66, -10], s: [38, 40], id: "UP-LKO-P123446" },
+  { c: [66, 22], s: [38, 20], id: "UP-LKO-P123447" },
+  { c: [-72, 72], s: [40, 40], id: "UP-LKO-P123448" },
+  { c: [-14, 72], s: [44, 40], id: "UP-LKO-P123449" },
+  { c: [60, 72], s: [36, 40], id: "UP-LKO-P123450" },
 ];
 
 export const SURROUNDING_PARCELS: Parcel[] = SURROUNDING_DEFS.map((p, i) => ({
