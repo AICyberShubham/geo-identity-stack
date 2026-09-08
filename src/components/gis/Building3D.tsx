@@ -137,7 +137,7 @@ function UnitVolume({
     group.current.scale.y += (targetS - group.current.scale.y) * k;
   });
 
-  const floorNo = unit.floor ?? 1;
+  const floorNo = parseInt(unit.floorId.replace(/\D/g, ""), 10) || 1;
   const wall = WALL_COLORS[floorNo % WALL_COLORS.length]!;
   const color = conflictShift !== 0 ? P.danger : selected ? P.primary : wall;
 
