@@ -186,8 +186,8 @@ function UnitVolume({
 
       {/* painted cornice band at the top of each storey */}
       <mesh position={[0, baseY + height / 2 - 0.18, 0]}>
-        <boxGeometry args={[width + 0.16, 0.3, depth + 0.16]} />
-        <meshStandardMaterial color={P.trim} roughness={0.9} />
+        <boxGeometry args={[width + 0.14, 0.22, depth + 0.14]} />
+        <meshStandardMaterial color={P.surround} roughness={0.94} />
       </mesh>
 
       <WindowBand w={width} d={depth} y={baseY} h={height * 0.5} seed={floorNo + x} />
@@ -247,8 +247,8 @@ function UnitVolume({
 function FloorSlab({ y }: { y: number }) {
   return (
     <mesh position={[0, y, 0]} receiveShadow castShadow>
-      <boxGeometry args={[W + 0.9, 0.22, D + 0.9]} />
-      <meshStandardMaterial color={P.trim} roughness={0.92} metalness={0.05} />
+      <boxGeometry args={[W + 0.6, 0.2, D + 0.6]} />
+      <meshStandardMaterial color={P.trim} roughness={0.94} metalness={0.03} />
     </mesh>
   );
 }
