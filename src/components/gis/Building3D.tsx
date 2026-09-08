@@ -167,31 +167,46 @@ function UnitVolume({
         <boxGeometry args={[width, height, depth]} />
         <meshStandardMaterial
           color={color}
-          roughness={0.62}
-          metalness={0.18}
+          roughness={0.85}
+          metalness={0.04}
           emissive={selected ? P.primary : conflictShift !== 0 ? P.danger : "#000000"}
-          emissiveIntensity={selected ? 0.28 : conflictShift !== 0 ? 0.4 : 0}
+          emissiveIntensity={selected ? 0.22 : conflictShift !== 0 ? 0.4 : 0}
           transparent
-          opacity={selected || isHovered ? 0.98 : 0.92}
+          opacity={isHovered && !selected ? 0.97 : 1}
         />
       </mesh>
 
-      <WindowBand w={width} d={depth} y={baseY} h={height * 0.5} />
+      {/* painted cornice band at the top of each storey */}
+      <mesh position={[0, baseY + height / 2 - 0.18, 0]}>
+        <boxGeometry args={[width + 0.16, 0.3, depth + 0.16]} />
+        <meshStandardMaterial color={P.trim} roughness={0.9} />
+      </mesh>
+
+      <WindowBand w={width} d={depth} y={baseY} h={height * 0.5} seed={floorNo + x} />
 
       {/* balcony */}
-      <mesh position={[0, unit.zMin + 0.35, depth / 2 + 0.7]} castShadow>
-        <boxGeometry args={[width * 0.55, 0.14, 1.4]} />
-        <meshStandardMaterial color={P.slab} roughness={0.8} />
+      <mesh position={[0, unit.zMin + 0.35, depth / 2 + 0.7]} castShadow receiveShadow>
+        <boxGeometry args={[width * 0.55, 0.16, 1.4]} />
+        <meshStandardMaterial color={P.trim} roughness={0.9} />
       </mesh>
-      <mesh position={[0, unit.zMin + 0.8, depth / 2 + 1.35]}>
-        <boxGeometry args={[width * 0.55, 0.9, 0.06]} />
+      <mesh position={[0, unit.zMin + 0.8, depth / 2 + 1.38]} castShadow>
+        <boxGeometry args={[width * 0.55, 0.85, 0.05]} />
         <meshStandardMaterial
-          color={P.glass}
+          color={P.windowGlass}
           transparent
-          opacity={0.4}
+          opacity={0.45}
           roughness={0.2}
           metalness={0.4}
         />
+      </mesh>
+      <mesh position={[0, unit.zMin + 1.25, depth / 2 + 1.38]}>
+        <boxGeometry args={[width * 0.55, 0.08, 0.09]} />
+        <meshStandardMaterial color={P.railing} metalness={0.6} roughness={0.4} />
+      </mesh>
+      {/* balcony door */}
+      <mesh position={[width * 0.22, unit.zMin + 1.4, depth / 2 + 0.07]}>
+        <planeGeometry args={[0.9, 2.1]} />
+        <meshStandardMaterial color={P.door} roughness={0.85} />
       </mesh>
 
       {(selected || isHovered) && (
