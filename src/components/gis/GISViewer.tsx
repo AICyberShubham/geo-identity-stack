@@ -36,7 +36,7 @@ function CameraRig() {
   useEffect(() => {
     if (view === "2d") {
       // exactly north-up: keep x at 0 so the orbit azimuth resolves to 0
-      desiredPos.current.set(0, 108, 0.001);
+      desiredPos.current.set(0, 150, 0.001);
       desiredTarget.current.set(0, 0, 0);
     } else {
       desiredPos.current.set(PRESETS.iso[0], PRESETS.iso[1], PRESETS.iso[2]);
@@ -85,6 +85,8 @@ function CameraRig() {
       panSpeed={0.8}
       enablePan
       enableRotate={view === "3d"}
+      minAzimuthAngle={view === "2d" ? 0 : -Infinity}
+      maxAzimuthAngle={view === "2d" ? 0 : Infinity}
       screenSpacePanning
       minDistance={10}
       maxDistance={320}
