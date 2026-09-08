@@ -270,23 +270,29 @@ export function Building3D() {
 
   return (
     <group>
-      {/* footprint always visible (2D + 3D) */}
-      <mesh rotation-x={-Math.PI / 2} position={[0, 0.08, 0]}>
+      {/* footprint always visible (2D + 3D) — no depth write, so it can't z-fight the plot fills */}
+      <mesh rotation-x={-Math.PI / 2} position={[0, 0.2, 0]} renderOrder={20}>
         <planeGeometry args={[W, D]} />
-        <meshBasicMaterial color={P.primary} transparent opacity={view === "2d" ? 0.28 : 0.12} />
+        <meshBasicMaterial
+          color={P.primary}
+          transparent
+          opacity={view === "2d" ? 0.28 : 0.12}
+          depthWrite={false}
+        />
       </mesh>
       <Line
         points={
           [
-            [-W / 2, 0.09, -D / 2],
-            [W / 2, 0.09, -D / 2],
-            [W / 2, 0.09, D / 2],
-            [-W / 2, 0.09, D / 2],
-            [-W / 2, 0.09, -D / 2],
+            [-W / 2, 0.22, -D / 2],
+            [W / 2, 0.22, -D / 2],
+            [W / 2, 0.22, D / 2],
+            [-W / 2, 0.22, D / 2],
+            [-W / 2, 0.22, -D / 2],
           ] as [number, number, number][]
         }
         color={P.primary}
         lineWidth={1.6}
+        depthWrite={false}
       />
 
       <group ref={shell} scale-y={0.0001}>
