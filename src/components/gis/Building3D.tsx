@@ -408,7 +408,7 @@ export function Building3D() {
         {/* core / stairwell */}
         <mesh position={[0, 9.2, 0]} castShadow>
           <boxGeometry args={[GAP * 0.9, 18.4, D * 0.55]} />
-          <meshStandardMaterial color={P.facadeLight} roughness={0.8} />
+          <meshStandardMaterial color={P.wallStone} roughness={0.85} />
         </mesh>
       </group>
     </group>
