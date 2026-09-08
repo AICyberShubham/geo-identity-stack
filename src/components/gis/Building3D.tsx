@@ -301,7 +301,7 @@ export function Building3D() {
                     <boxGeometry args={[W * 0.34, 1.8, D * 0.4]} />
                     <meshStandardMaterial
                       color={
-                        selection.id === floor.units[0]!.id ? P.primary : P.facadeLight
+                        selection.id === floor.units[0]!.id ? P.primary : P.wallStone
                       }
                       roughness={0.7}
                     />
