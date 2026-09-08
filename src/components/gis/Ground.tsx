@@ -23,8 +23,23 @@ function ParcelOutline({
   return <Line points={pts} color={color} lineWidth={width} />;
 }
 
+function bbox(points: [number, number][]) {
+  const xs = points.map((p) => p[0]);
+  const zs = points.map((p) => p[1]);
+  const minX = Math.min(...xs);
+  const maxX = Math.max(...xs);
+  const minZ = Math.min(...zs);
+  const maxZ = Math.max(...zs);
+  return {
+    cx: (minX + maxX) / 2,
+    cz: (minZ + maxZ) / 2,
+    w: Math.max(maxX - minX, 0.5),
+    d: Math.max(maxZ - minZ, 0.5),
+  };
+}
+
 export function Ground() {
-  const { layers, showUnderground } = useBhu();
+  const { layers, showUnderground, view } = useBhu();
   const groundOpacity = showUnderground ? 0.32 : 1;
 
   return (
@@ -38,6 +53,9 @@ export function Ground() {
           metalness={0.05}
           transparent
           opacity={groundOpacity}
+          polygonOffset
+          polygonOffsetFactor={4}
+          polygonOffsetUnits={4}
         />
       </mesh>
 
