@@ -105,8 +105,10 @@ function CameraRig() {
 function SceneLights() {
   return (
     <>
-      <hemisphereLight args={["#8fb6d8", "#0f141b", 0.75]} />
-      <ambientLight intensity={0.35} />
+      <hemisphereLight args={["#9dc2e0", "#151b23", 0.85]} />
+      <ambientLight intensity={0.3} />
+      {/* soft fill from the front-left so facades never read as flat colour */}
+      <directionalLight position={[-34, 26, 44]} intensity={0.45} color="#ffe8c8" />
       <directionalLight
         position={[48, 62, 34]}
         intensity={1.35}
@@ -155,11 +157,11 @@ export function GISViewer() {
 
   return (
     <Canvas
-      shadows
-      dpr={[1, 2]}
-      camera={{ position: PRESETS.reset, fov: 42, near: 1, far: 900 }}
+      shadows={{ type: THREE.PCFShadowMap }}
+      dpr={[1, 1.8]}
+      camera={{ position: PRESETS.reset, fov: 42, near: 2, far: 620 }}
       onPointerMissed={() => select({ kind: null, id: null })}
-      gl={{ antialias: true, logarithmicDepthBuffer: true }}
+      gl={{ antialias: true, powerPreference: "high-performance" }}
     >
       <color attach="background" args={[P.bg]} />
       <fog attach="fog" args={[P.bg, 150, 340]} />
