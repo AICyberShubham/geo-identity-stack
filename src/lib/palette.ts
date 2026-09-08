@@ -21,4 +21,18 @@ export const P = {
   tunnel: "#f0a63c",
   utility: "#7fa8ff",
   basement: "#3b4654",
+  // realistic building palette
+  wallCream: "#d9c9a8",
+  wallSand: "#c8ab84",
+  wallTerracotta: "#b8735a",
+  wallStone: "#b6b2a6",
+  wallBlue: "#8fa5b8",
+  trim: "#f2ece0",
+  windowFrame: "#3a3f45",
+  windowGlass: "#7fb6c9",
+  windowLit: "#ffd89a",
+  railing: "#8d949c",
+  roofDeck: "#8d8578",
+  waterTank: "#3f6ea8",
+  door: "#7a4b32",
 } as const;

@@ -12,39 +12,93 @@ const D = BUILDING.footprint.depth;
 const GAP = 0.8;
 const UNIT_W = (W - GAP) / 2;
 
-function WindowBand({ w, d, y, h }: { w: number; d: number; y: number; h: number }) {
+/** Warm residential wall colours, varied per floor so the tower reads like a real building. */
+const WALL_COLORS = [
+  P.wallCream,
+  P.wallSand,
+  P.wallCream,
+  P.wallTerracotta,
+  P.wallSand,
+  P.wallStone,
+  P.wallBlue,
+];
+
+/** A grid of framed windows on one facade side, some of them lit. */
+function WindowWall({
+  width,
+  height,
+  seed,
+  cols = 3,
+}: {
+  width: number;
+  height: number;
+  seed: number;
+  cols?: number;
+}) {
+  const ww = Math.min(1.5, (width / cols) * 0.52);
+  const wh = Math.min(1.5, height * 0.5);
+  const items = [];
+  for (let c = 0; c < cols; c++) {
+    const x = (c - (cols - 1) / 2) * (width / cols);
+    const lit = (Math.sin((c + 1) * 12.9898 + seed * 78.233) * 43758.5453) % 1;
+    items.push(
+      <group key={c} position={[x, 0, 0]}>
+        <mesh>
+          <planeGeometry args={[ww + 0.22, wh + 0.22]} />
+          <meshStandardMaterial color={P.trim} roughness={0.9} />
+        </mesh>
+        <mesh position={[0, 0, 0.02]}>
+          <planeGeometry args={[ww, wh]} />
+          <meshStandardMaterial
+            color={P.windowGlass}
+            emissive={Math.abs(lit) > 0.55 ? P.windowLit : P.windowGlass}
+            emissiveIntensity={Math.abs(lit) > 0.55 ? 0.75 : 0.12}
+            roughness={0.18}
+            metalness={0.35}
+          />
+        </mesh>
+        {/* mullions */}
+        <mesh position={[0, 0, 0.04]}>
+          <planeGeometry args={[0.05, wh]} />
+          <meshStandardMaterial color={P.windowFrame} />
+        </mesh>
+        <mesh position={[0, 0, 0.04]}>
+          <planeGeometry args={[ww, 0.05]} />
+          <meshStandardMaterial color={P.windowFrame} />
+        </mesh>
+      </group>,
+    );
+  }
+  return <>{items}</>;
+}
+
+function WindowBand({
+  w,
+  d,
+  y,
+  h,
+  seed,
+}: {
+  w: number;
+  d: number;
+  y: number;
+  h: number;
+  seed: number;
+}) {
   return (
     <group position={[0, y, 0]}>
-      <mesh position={[0, 0, d / 2 + 0.02]}>
-        <planeGeometry args={[w * 0.82, h]} />
-        <meshStandardMaterial
-          color={P.glass}
-          emissive={P.glassLit}
-          emissiveIntensity={0.35}
-          roughness={0.25}
-          metalness={0.5}
-        />
-      </mesh>
-      <mesh position={[0, 0, -d / 2 - 0.02]} rotation-y={Math.PI}>
-        <planeGeometry args={[w * 0.82, h]} />
-        <meshStandardMaterial
-          color={P.glass}
-          emissive={P.glassLit}
-          emissiveIntensity={0.25}
-          roughness={0.25}
-          metalness={0.5}
-        />
-      </mesh>
-      <mesh position={[w / 2 + 0.02, 0, 0]} rotation-y={Math.PI / 2}>
-        <planeGeometry args={[d * 0.7, h]} />
-        <meshStandardMaterial
-          color={P.glass}
-          emissive={P.glassLit}
-          emissiveIntensity={0.2}
-          roughness={0.3}
-          metalness={0.5}
-        />
-      </mesh>
+      <group position={[0, 0, d / 2 + 0.06]}>
+        <WindowWall width={w} height={h} seed={seed} />
+      </group>
+      <group position={[0, 0, -d / 2 - 0.06]} rotation-y={Math.PI}>
+        <WindowWall width={w} height={h} seed={seed + 3.1} />
+      </group>
+      <group position={[w / 2 + 0.06, 0, 0]} rotation-y={Math.PI / 2}>
+        <WindowWall width={d} height={h} seed={seed + 6.4} cols={4} />
+      </group>
+      <group position={[-w / 2 - 0.06, 0, 0]} rotation-y={-Math.PI / 2}>
+        <WindowWall width={d} height={h} seed={seed + 9.7} cols={4} />
+      </group>
     </group>
   );
 }
@@ -83,7 +137,9 @@ function UnitVolume({
     group.current.scale.y += (targetS - group.current.scale.y) * k;
   });
 
-  const color = conflictShift !== 0 ? P.danger : selected ? P.primary : P.facade;
+  const floorNo = parseInt(unit.floorId.replace(/\D/g, ""), 10) || 1;
+  const wall = WALL_COLORS[floorNo % WALL_COLORS.length]!;
+  const color = conflictShift !== 0 ? P.danger : selected ? P.primary : wall;
 
   return (
     <group ref={group} position={[x, 0, 0]}>
@@ -111,31 +167,46 @@ function UnitVolume({
         <boxGeometry args={[width, height, depth]} />
         <meshStandardMaterial
           color={color}
-          roughness={0.62}
-          metalness={0.18}
+          roughness={0.85}
+          metalness={0.04}
           emissive={selected ? P.primary : conflictShift !== 0 ? P.danger : "#000000"}
-          emissiveIntensity={selected ? 0.28 : conflictShift !== 0 ? 0.4 : 0}
+          emissiveIntensity={selected ? 0.22 : conflictShift !== 0 ? 0.4 : 0}
           transparent
-          opacity={selected || isHovered ? 0.98 : 0.92}
+          opacity={isHovered && !selected ? 0.97 : 1}
         />
       </mesh>
 
-      <WindowBand w={width} d={depth} y={baseY} h={height * 0.5} />
+      {/* painted cornice band at the top of each storey */}
+      <mesh position={[0, baseY + height / 2 - 0.18, 0]}>
+        <boxGeometry args={[width + 0.16, 0.3, depth + 0.16]} />
+        <meshStandardMaterial color={P.trim} roughness={0.9} />
+      </mesh>
+
+      <WindowBand w={width} d={depth} y={baseY} h={height * 0.5} seed={floorNo + x} />
 
       {/* balcony */}
-      <mesh position={[0, unit.zMin + 0.35, depth / 2 + 0.7]} castShadow>
-        <boxGeometry args={[width * 0.55, 0.14, 1.4]} />
-        <meshStandardMaterial color={P.slab} roughness={0.8} />
+      <mesh position={[0, unit.zMin + 0.35, depth / 2 + 0.7]} castShadow receiveShadow>
+        <boxGeometry args={[width * 0.55, 0.16, 1.4]} />
+        <meshStandardMaterial color={P.trim} roughness={0.9} />
       </mesh>
-      <mesh position={[0, unit.zMin + 0.8, depth / 2 + 1.35]}>
-        <boxGeometry args={[width * 0.55, 0.9, 0.06]} />
+      <mesh position={[0, unit.zMin + 0.8, depth / 2 + 1.38]} castShadow>
+        <boxGeometry args={[width * 0.55, 0.85, 0.05]} />
         <meshStandardMaterial
-          color={P.glass}
+          color={P.windowGlass}
           transparent
-          opacity={0.4}
+          opacity={0.45}
           roughness={0.2}
           metalness={0.4}
         />
+      </mesh>
+      <mesh position={[0, unit.zMin + 1.25, depth / 2 + 1.38]}>
+        <boxGeometry args={[width * 0.55, 0.08, 0.09]} />
+        <meshStandardMaterial color={P.railing} metalness={0.6} roughness={0.4} />
+      </mesh>
+      {/* balcony door */}
+      <mesh position={[width * 0.22, unit.zMin + 1.4, depth / 2 + 0.07]}>
+        <planeGeometry args={[0.9, 2.1]} />
+        <meshStandardMaterial color={P.door} roughness={0.85} />
       </mesh>
 
       {(selected || isHovered) && (
@@ -169,7 +240,7 @@ function FloorSlab({ y }: { y: number }) {
   return (
     <mesh position={[0, y, 0]} receiveShadow castShadow>
       <boxGeometry args={[W + 0.9, 0.22, D + 0.9]} />
-      <meshStandardMaterial color={P.slab} roughness={0.85} metalness={0.1} />
+      <meshStandardMaterial color={P.trim} roughness={0.92} metalness={0.05} />
     </mesh>
   );
 }
@@ -230,19 +301,43 @@ export function Building3D() {
                     <boxGeometry args={[W * 0.34, 1.8, D * 0.4]} />
                     <meshStandardMaterial
                       color={
-                        selection.id === floor.units[0]!.id ? P.primary : P.facadeLight
+                        selection.id === floor.units[0]!.id ? P.primary : P.wallStone
                       }
                       roughness={0.7}
                     />
                   </mesh>
-                  {/* parapet */}
+                  {/* roof deck */}
+                  <mesh position={[0, floor.zMin + 0.13, 0]} receiveShadow>
+                    <boxGeometry args={[W + 0.7, 0.06, D + 0.7]} />
+                    <meshStandardMaterial color={P.roofDeck} roughness={0.95} />
+                  </mesh>
+                  {/* parapet on all four edges */}
                   {[
-                    [0, D / 2],
-                    [0, -D / 2],
-                  ].map((pos, i) => (
-                    <mesh key={i} position={[pos[0]!, floor.zMin + 0.55, pos[1]!]}>
-                      <boxGeometry args={[W + 0.9, 0.9, 0.16]} />
-                      <meshStandardMaterial color={P.slab} transparent opacity={0.7} />
+                    [0, D / 2, W + 0.9, 0.16],
+                    [0, -D / 2, W + 0.9, 0.16],
+                    [W / 2, 0, 0.16, D + 0.9],
+                    [-W / 2, 0, 0.16, D + 0.9],
+                  ].map((p, i) => (
+                    <mesh key={i} position={[p[0]!, floor.zMin + 0.55, p[1]!]} castShadow>
+                      <boxGeometry args={[p[2]!, 0.9, p[3]!]} />
+                      <meshStandardMaterial color={P.trim} roughness={0.9} />
+                    </mesh>
+                  ))}
+                  {/* water tanks + AC units */}
+                  {[-1, 1].map((s) => (
+                    <mesh key={s} position={[s * W * 0.3, floor.zMin + 1.5, D * 0.28]} castShadow>
+                      <cylinderGeometry args={[1, 1.1, 1.6, 12]} />
+                      <meshStandardMaterial color={P.waterTank} roughness={0.6} />
+                    </mesh>
+                  ))}
+                  {[-1.4, 0, 1.4].map((s) => (
+                    <mesh
+                      key={s}
+                      position={[s * 2, floor.zMin + 0.55, -D * 0.3]}
+                      castShadow
+                    >
+                      <boxGeometry args={[1.2, 0.8, 0.9]} />
+                      <meshStandardMaterial color={P.railing} metalness={0.5} roughness={0.5} />
                     </mesh>
                   ))}
                   <mesh position={[W * 0.34, floor.zMin + 1.4, -D * 0.28]}>
@@ -313,7 +408,7 @@ export function Building3D() {
         {/* core / stairwell */}
         <mesh position={[0, 9.2, 0]} castShadow>
           <boxGeometry args={[GAP * 0.9, 18.4, D * 0.55]} />
-          <meshStandardMaterial color={P.facadeLight} roughness={0.8} />
+          <meshStandardMaterial color={P.wallStone} roughness={0.85} />
         </mesh>
       </group>
     </group>
