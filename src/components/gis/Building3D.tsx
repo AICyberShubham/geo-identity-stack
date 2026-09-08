@@ -12,39 +12,93 @@ const D = BUILDING.footprint.depth;
 const GAP = 0.8;
 const UNIT_W = (W - GAP) / 2;
 
-function WindowBand({ w, d, y, h }: { w: number; d: number; y: number; h: number }) {
+/** Warm residential wall colours, varied per floor so the tower reads like a real building. */
+const WALL_COLORS = [
+  P.wallCream,
+  P.wallSand,
+  P.wallCream,
+  P.wallTerracotta,
+  P.wallSand,
+  P.wallStone,
+  P.wallBlue,
+];
+
+/** A grid of framed windows on one facade side, some of them lit. */
+function WindowWall({
+  width,
+  height,
+  seed,
+  cols = 3,
+}: {
+  width: number;
+  height: number;
+  seed: number;
+  cols?: number;
+}) {
+  const ww = Math.min(1.5, (width / cols) * 0.52);
+  const wh = Math.min(1.5, height * 0.5);
+  const items = [];
+  for (let c = 0; c < cols; c++) {
+    const x = (c - (cols - 1) / 2) * (width / cols);
+    const lit = (Math.sin((c + 1) * 12.9898 + seed * 78.233) * 43758.5453) % 1;
+    items.push(
+      <group key={c} position={[x, 0, 0]}>
+        <mesh>
+          <planeGeometry args={[ww + 0.22, wh + 0.22]} />
+          <meshStandardMaterial color={P.trim} roughness={0.9} />
+        </mesh>
+        <mesh position={[0, 0, 0.02]}>
+          <planeGeometry args={[ww, wh]} />
+          <meshStandardMaterial
+            color={P.windowGlass}
+            emissive={Math.abs(lit) > 0.55 ? P.windowLit : P.windowGlass}
+            emissiveIntensity={Math.abs(lit) > 0.55 ? 0.75 : 0.12}
+            roughness={0.18}
+            metalness={0.35}
+          />
+        </mesh>
+        {/* mullions */}
+        <mesh position={[0, 0, 0.04]}>
+          <planeGeometry args={[0.05, wh]} />
+          <meshStandardMaterial color={P.windowFrame} />
+        </mesh>
+        <mesh position={[0, 0, 0.04]}>
+          <planeGeometry args={[ww, 0.05]} />
+          <meshStandardMaterial color={P.windowFrame} />
+        </mesh>
+      </group>,
+    );
+  }
+  return <>{items}</>;
+}
+
+function WindowBand({
+  w,
+  d,
+  y,
+  h,
+  seed,
+}: {
+  w: number;
+  d: number;
+  y: number;
+  h: number;
+  seed: number;
+}) {
   return (
     <group position={[0, y, 0]}>
-      <mesh position={[0, 0, d / 2 + 0.02]}>
-        <planeGeometry args={[w * 0.82, h]} />
-        <meshStandardMaterial
-          color={P.glass}
-          emissive={P.glassLit}
-          emissiveIntensity={0.35}
-          roughness={0.25}
-          metalness={0.5}
-        />
-      </mesh>
-      <mesh position={[0, 0, -d / 2 - 0.02]} rotation-y={Math.PI}>
-        <planeGeometry args={[w * 0.82, h]} />
-        <meshStandardMaterial
-          color={P.glass}
-          emissive={P.glassLit}
-          emissiveIntensity={0.25}
-          roughness={0.25}
-          metalness={0.5}
-        />
-      </mesh>
-      <mesh position={[w / 2 + 0.02, 0, 0]} rotation-y={Math.PI / 2}>
-        <planeGeometry args={[d * 0.7, h]} />
-        <meshStandardMaterial
-          color={P.glass}
-          emissive={P.glassLit}
-          emissiveIntensity={0.2}
-          roughness={0.3}
-          metalness={0.5}
-        />
-      </mesh>
+      <group position={[0, 0, d / 2 + 0.06]}>
+        <WindowWall width={w} height={h} seed={seed} />
+      </group>
+      <group position={[0, 0, -d / 2 - 0.06]} rotation-y={Math.PI}>
+        <WindowWall width={w} height={h} seed={seed + 3.1} />
+      </group>
+      <group position={[w / 2 + 0.06, 0, 0]} rotation-y={Math.PI / 2}>
+        <WindowWall width={d} height={h} seed={seed + 6.4} cols={4} />
+      </group>
+      <group position={[-w / 2 - 0.06, 0, 0]} rotation-y={-Math.PI / 2}>
+        <WindowWall width={d} height={h} seed={seed + 9.7} cols={4} />
+      </group>
     </group>
   );
 }
