@@ -84,6 +84,7 @@ function CameraRig() {
       zoomSpeed={0.9}
       panSpeed={0.8}
       enablePan
+      enableRotate={view === "3d"}
       screenSpacePanning
       minDistance={10}
       maxDistance={320}
