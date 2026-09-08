@@ -129,7 +129,12 @@ export function Ground() {
             const b = bbox(p.geometry);
             return (
               <group key={p.id}>
-                <ParcelOutline points={p.geometry} color={P.parcel} width={1} y={0.05} />
+                <ParcelOutline
+                  points={p.geometry}
+                  color={P.parcel}
+                  width={view === "2d" ? 1.8 : 1}
+                  y={0.05}
+                />
                 {/* flat cadastral fill: readable in 2D map view */}
                 <mesh rotation-x={-Math.PI / 2} position={[b.cx, 0.035, b.cz]}>
                   <planeGeometry args={[b.w, b.d]} />
