@@ -254,6 +254,8 @@ export function Building3D() {
     const k = 1 - Math.exp(-6 * Math.min(delta, 0.05));
     const target = view === "3d" ? 1 : 0.0001;
     shell.current.scale.y += (target - shell.current.scale.y) * k;
+    // hide the collapsed shell in flat view so it never z-fights with the ground
+    shell.current.visible = shell.current.scale.y > 0.02;
   });
 
   if (!layers.buildings) return null;
