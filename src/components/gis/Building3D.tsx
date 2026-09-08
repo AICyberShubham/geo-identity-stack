@@ -41,30 +41,38 @@ function WindowWall({
   for (let c = 0; c < cols; c++) {
     const x = (c - (cols - 1) / 2) * (width / cols);
     const lit = (Math.sin((c + 1) * 12.9898 + seed * 78.233) * 43758.5453) % 1;
+    const isLit = Math.abs(lit) > 0.55;
     items.push(
       <group key={c} position={[x, 0, 0]}>
-        <mesh>
-          <planeGeometry args={[ww + 0.22, wh + 0.22]} />
-          <meshStandardMaterial color={P.trim} roughness={0.9} />
+        {/* protruding surround: real geometry, so the facade has depth from any angle */}
+        <mesh position={[0, 0, 0.05]} castShadow receiveShadow>
+          <boxGeometry args={[ww + 0.3, wh + 0.3, 0.12]} />
+          <meshStandardMaterial color={P.trim} roughness={0.92} />
         </mesh>
-        <mesh position={[0, 0, 0.02]}>
-          <planeGeometry args={[ww, wh]} />
+        {/* recessed glass */}
+        <mesh position={[0, 0, -0.03]}>
+          <boxGeometry args={[ww, wh, 0.06]} />
           <meshStandardMaterial
             color={P.windowGlass}
-            emissive={Math.abs(lit) > 0.55 ? P.windowLit : P.windowGlass}
-            emissiveIntensity={Math.abs(lit) > 0.55 ? 0.75 : 0.12}
-            roughness={0.18}
-            metalness={0.35}
+            emissive={isLit ? P.windowLit : P.windowGlass}
+            emissiveIntensity={isLit ? 0.7 : 0.1}
+            roughness={0.12}
+            metalness={0.55}
           />
         </mesh>
         {/* mullions */}
-        <mesh position={[0, 0, 0.04]}>
-          <planeGeometry args={[0.05, wh]} />
-          <meshStandardMaterial color={P.windowFrame} />
+        <mesh position={[0, 0, 0.09]}>
+          <boxGeometry args={[0.06, wh, 0.06]} />
+          <meshStandardMaterial color={P.windowFrame} roughness={0.7} />
         </mesh>
-        <mesh position={[0, 0, 0.04]}>
-          <planeGeometry args={[ww, 0.05]} />
-          <meshStandardMaterial color={P.windowFrame} />
+        <mesh position={[0, 0, 0.09]}>
+          <boxGeometry args={[ww, 0.06, 0.06]} />
+          <meshStandardMaterial color={P.windowFrame} roughness={0.7} />
+        </mesh>
+        {/* sill / shading ledge */}
+        <mesh position={[0, -wh / 2 - 0.2, 0.14]} castShadow>
+          <boxGeometry args={[ww + 0.42, 0.1, 0.34]} />
+          <meshStandardMaterial color={P.trim} roughness={0.95} />
         </mesh>
       </group>,
     );
