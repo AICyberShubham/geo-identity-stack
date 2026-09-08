@@ -147,9 +147,14 @@ export function Ground() {
             width={2.4}
             y={0.06}
           />
-          <mesh rotation-x={-Math.PI / 2} position={[0, 0.04, 0]}>
+          <mesh rotation-x={-Math.PI / 2} position={[0, 0.045, 0]}>
             <planeGeometry args={[50, 50]} />
-            <meshBasicMaterial color={P.primary} transparent opacity={0.07} />
+            <meshBasicMaterial
+              color={P.primary}
+              transparent
+              opacity={view === "2d" ? 0.16 : 0.07}
+              depthWrite={false}
+            />
           </mesh>
         </group>
       )}
