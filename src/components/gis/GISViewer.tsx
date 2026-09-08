@@ -35,7 +35,8 @@ function CameraRig() {
 
   useEffect(() => {
     if (view === "2d") {
-      desiredPos.current.set(0.01, 96, 0.01);
+      // exactly north-up: keep x at 0 so the orbit azimuth resolves to 0
+      desiredPos.current.set(0, 195, 0.001);
       desiredTarget.current.set(0, 0, 0);
     } else {
       desiredPos.current.set(PRESETS.iso[0], PRESETS.iso[1], PRESETS.iso[2]);
@@ -83,6 +84,9 @@ function CameraRig() {
       zoomSpeed={0.9}
       panSpeed={0.8}
       enablePan
+      enableRotate={view === "3d"}
+      minAzimuthAngle={view === "2d" ? 0 : -Infinity}
+      maxAzimuthAngle={view === "2d" ? 0 : Infinity}
       screenSpacePanning
       minDistance={10}
       maxDistance={320}
@@ -107,6 +111,8 @@ function SceneLights() {
         position={[48, 62, 34]}
         intensity={1.35}
         castShadow
+        shadow-bias={-0.0006}
+        shadow-normalBias={0.04}
         shadow-mapSize-width={1024}
         shadow-mapSize-height={1024}
         shadow-camera-left={-70}
@@ -151,9 +157,9 @@ export function GISViewer() {
     <Canvas
       shadows
       dpr={[1, 2]}
-      camera={{ position: PRESETS.reset, fov: 42, near: 0.5, far: 1200 }}
+      camera={{ position: PRESETS.reset, fov: 42, near: 1, far: 900 }}
       onPointerMissed={() => select({ kind: null, id: null })}
-      gl={{ antialias: true }}
+      gl={{ antialias: true, logarithmicDepthBuffer: true }}
     >
       <color attach="background" args={[P.bg]} />
       <fog attach="fog" args={[P.bg, 150, 340]} />
