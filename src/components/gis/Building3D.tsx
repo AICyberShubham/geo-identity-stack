@@ -137,7 +137,9 @@ function UnitVolume({
     group.current.scale.y += (targetS - group.current.scale.y) * k;
   });
 
-  const color = conflictShift !== 0 ? P.danger : selected ? P.primary : P.facade;
+  const floorNo = unit.floor ?? 1;
+  const wall = WALL_COLORS[floorNo % WALL_COLORS.length]!;
+  const color = conflictShift !== 0 ? P.danger : selected ? P.primary : wall;
 
   return (
     <group ref={group} position={[x, 0, 0]}>
