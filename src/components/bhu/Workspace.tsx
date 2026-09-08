@@ -36,7 +36,10 @@ function ViewToggle() {
 export function Workspace() {
   const { view, showUnderground, setShowUnderground, layers } = useBhu();
   const [extracting, setExtracting] = useState(false);
-  const [panelOpen, setPanelOpen] = useState(true);
+  // on small screens the stacked panel would cover the map, so start collapsed
+  const [panelOpen, setPanelOpen] = useState(
+    () => typeof window === "undefined" || window.innerWidth >= 1280,
+  );
 
   return (
     <div className="relative flex min-h-0 flex-1">

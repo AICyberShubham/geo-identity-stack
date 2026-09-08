@@ -46,8 +46,8 @@ function WindowWall({
       <group key={c} position={[x, 0, 0]}>
         {/* protruding surround: real geometry, so the facade has depth from any angle */}
         <mesh position={[0, 0, 0.05]} castShadow receiveShadow>
-          <boxGeometry args={[ww + 0.3, wh + 0.3, 0.12]} />
-          <meshStandardMaterial color={P.trim} roughness={0.92} />
+          <boxGeometry args={[ww + 0.26, wh + 0.26, 0.12]} />
+          <meshStandardMaterial color={P.surround} roughness={0.95} />
         </mesh>
         {/* recessed glass */}
         <mesh position={[0, 0, -0.03]}>
@@ -70,9 +70,9 @@ function WindowWall({
           <meshStandardMaterial color={P.windowFrame} roughness={0.7} />
         </mesh>
         {/* sill / shading ledge */}
-        <mesh position={[0, -wh / 2 - 0.2, 0.14]} castShadow>
-          <boxGeometry args={[ww + 0.42, 0.1, 0.34]} />
-          <meshStandardMaterial color={P.trim} roughness={0.95} />
+        <mesh position={[0, -wh / 2 - 0.18, 0.12]} castShadow>
+          <boxGeometry args={[ww + 0.34, 0.08, 0.26]} />
+          <meshStandardMaterial color={P.surround} roughness={0.96} />
         </mesh>
       </group>,
     );
