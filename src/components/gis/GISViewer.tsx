@@ -88,10 +88,12 @@ function CameraRig() {
       minAzimuthAngle={view === "2d" ? 0 : -Infinity}
       maxAzimuthAngle={view === "2d" ? 0 : Infinity}
       screenSpacePanning
-      minDistance={10}
-      maxDistance={320}
+      minDistance={view === "2d" ? 40 : 26}
+      maxDistance={300}
       minPolarAngle={0.02}
-      maxPolarAngle={Math.PI - 0.02}
+      // stop just under the horizon: full 360° spin, but the camera never
+      // flips beneath the terrain plate (which caused popping/clipping)
+      maxPolarAngle={view === "2d" ? 0.02 : Math.PI * 0.54}
       onStart={() => {
         // user took over: cancel any programmatic motion instantly
         animating.current = false;
