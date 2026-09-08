@@ -426,6 +426,43 @@ export function Building3D() {
           <boxGeometry args={[GAP * 0.9, 18.4, D * 0.55]} />
           <meshStandardMaterial color={P.wallStone} roughness={0.85} />
         </mesh>
+
+        {/* corner pilasters: vertical relief so the mass never reads as a flat slab */}
+        {[
+          [-W / 2, -D / 2],
+          [W / 2, -D / 2],
+          [W / 2, D / 2],
+          [-W / 2, D / 2],
+        ].map(([px, pz], i) => (
+          <mesh key={i} position={[px!, 9.4, pz!]} castShadow receiveShadow>
+            <boxGeometry args={[1.1, 18.8, 1.1]} />
+            <meshStandardMaterial color={P.wallStone} roughness={0.88} />
+          </mesh>
+        ))}
+
+        {/* plinth + entrance porch at street level */}
+        <mesh position={[0, 0.35, 0]} receiveShadow castShadow>
+          <boxGeometry args={[W + 1.6, 0.7, D + 1.6]} />
+          <meshStandardMaterial color={P.trim} roughness={0.95} />
+        </mesh>
+        <mesh position={[0, 1.5, D / 2 + 1.6]} castShadow receiveShadow>
+          <boxGeometry args={[5.4, 2.6, 2.4]} />
+          <meshStandardMaterial color={P.wallStone} roughness={0.85} />
+        </mesh>
+        <mesh position={[0, 1.3, D / 2 + 2.82]}>
+          <boxGeometry args={[3.2, 2.1, 0.12]} />
+          <meshStandardMaterial
+            color={P.windowGlass}
+            transparent
+            opacity={0.55}
+            roughness={0.15}
+            metalness={0.5}
+          />
+        </mesh>
+        <mesh position={[0, 2.95, D / 2 + 2.2]} castShadow>
+          <boxGeometry args={[6.6, 0.22, 3.6]} />
+          <meshStandardMaterial color={P.trim} roughness={0.9} />
+        </mesh>
       </group>
     </group>
   );
