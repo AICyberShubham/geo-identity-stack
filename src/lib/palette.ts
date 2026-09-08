@@ -27,7 +27,9 @@ export const P = {
   wallTerracotta: "#b8735a",
   wallStone: "#b6b2a6",
   wallBlue: "#8fa5b8",
-  trim: "#f2ece0",
+  trim: "#e8dfd0",
+  /** muted warm stone for window surrounds and sills — keeps facades colourful, not white-striped */
+  surround: "#cbbda6",
   windowFrame: "#3a3f45",
   windowGlass: "#7fb6c9",
   windowLit: "#ffd89a",

@@ -41,30 +41,38 @@ function WindowWall({
   for (let c = 0; c < cols; c++) {
     const x = (c - (cols - 1) / 2) * (width / cols);
     const lit = (Math.sin((c + 1) * 12.9898 + seed * 78.233) * 43758.5453) % 1;
+    const isLit = Math.abs(lit) > 0.55;
     items.push(
       <group key={c} position={[x, 0, 0]}>
-        <mesh>
-          <planeGeometry args={[ww + 0.22, wh + 0.22]} />
-          <meshStandardMaterial color={P.trim} roughness={0.9} />
+        {/* protruding surround: real geometry, so the facade has depth from any angle */}
+        <mesh position={[0, 0, 0.05]} castShadow receiveShadow>
+          <boxGeometry args={[ww + 0.26, wh + 0.26, 0.12]} />
+          <meshStandardMaterial color={P.surround} roughness={0.95} />
         </mesh>
-        <mesh position={[0, 0, 0.02]}>
-          <planeGeometry args={[ww, wh]} />
+        {/* recessed glass */}
+        <mesh position={[0, 0, -0.03]}>
+          <boxGeometry args={[ww, wh, 0.06]} />
           <meshStandardMaterial
             color={P.windowGlass}
-            emissive={Math.abs(lit) > 0.55 ? P.windowLit : P.windowGlass}
-            emissiveIntensity={Math.abs(lit) > 0.55 ? 0.75 : 0.12}
-            roughness={0.18}
-            metalness={0.35}
+            emissive={isLit ? P.windowLit : P.windowGlass}
+            emissiveIntensity={isLit ? 0.7 : 0.1}
+            roughness={0.12}
+            metalness={0.55}
           />
         </mesh>
         {/* mullions */}
-        <mesh position={[0, 0, 0.04]}>
-          <planeGeometry args={[0.05, wh]} />
-          <meshStandardMaterial color={P.windowFrame} />
+        <mesh position={[0, 0, 0.09]}>
+          <boxGeometry args={[0.06, wh, 0.06]} />
+          <meshStandardMaterial color={P.windowFrame} roughness={0.7} />
         </mesh>
-        <mesh position={[0, 0, 0.04]}>
-          <planeGeometry args={[ww, 0.05]} />
-          <meshStandardMaterial color={P.windowFrame} />
+        <mesh position={[0, 0, 0.09]}>
+          <boxGeometry args={[ww, 0.06, 0.06]} />
+          <meshStandardMaterial color={P.windowFrame} roughness={0.7} />
+        </mesh>
+        {/* sill / shading ledge */}
+        <mesh position={[0, -wh / 2 - 0.18, 0.12]} castShadow>
+          <boxGeometry args={[ww + 0.34, 0.08, 0.26]} />
+          <meshStandardMaterial color={P.surround} roughness={0.96} />
         </mesh>
       </group>,
     );
@@ -178,8 +186,8 @@ function UnitVolume({
 
       {/* painted cornice band at the top of each storey */}
       <mesh position={[0, baseY + height / 2 - 0.18, 0]}>
-        <boxGeometry args={[width + 0.16, 0.3, depth + 0.16]} />
-        <meshStandardMaterial color={P.trim} roughness={0.9} />
+        <boxGeometry args={[width + 0.14, 0.22, depth + 0.14]} />
+        <meshStandardMaterial color={P.surround} roughness={0.94} />
       </mesh>
 
       <WindowBand w={width} d={depth} y={baseY} h={height * 0.5} seed={floorNo + x} />
@@ -239,8 +247,8 @@ function UnitVolume({
 function FloorSlab({ y }: { y: number }) {
   return (
     <mesh position={[0, y, 0]} receiveShadow castShadow>
-      <boxGeometry args={[W + 0.9, 0.22, D + 0.9]} />
-      <meshStandardMaterial color={P.trim} roughness={0.92} metalness={0.05} />
+      <boxGeometry args={[W + 0.6, 0.2, D + 0.6]} />
+      <meshStandardMaterial color={P.trim} roughness={0.94} metalness={0.03} />
     </mesh>
   );
 }
@@ -262,23 +270,29 @@ export function Building3D() {
 
   return (
     <group>
-      {/* footprint always visible (2D + 3D) */}
-      <mesh rotation-x={-Math.PI / 2} position={[0, 0.08, 0]}>
+      {/* footprint always visible (2D + 3D) — no depth write, so it can't z-fight the plot fills */}
+      <mesh rotation-x={-Math.PI / 2} position={[0, 0.2, 0]} renderOrder={20}>
         <planeGeometry args={[W, D]} />
-        <meshBasicMaterial color={P.primary} transparent opacity={view === "2d" ? 0.28 : 0.12} />
+        <meshBasicMaterial
+          color={P.primary}
+          transparent
+          opacity={view === "2d" ? 0.28 : 0.12}
+          depthWrite={false}
+        />
       </mesh>
       <Line
         points={
           [
-            [-W / 2, 0.09, -D / 2],
-            [W / 2, 0.09, -D / 2],
-            [W / 2, 0.09, D / 2],
-            [-W / 2, 0.09, D / 2],
-            [-W / 2, 0.09, -D / 2],
+            [-W / 2, 0.22, -D / 2],
+            [W / 2, 0.22, -D / 2],
+            [W / 2, 0.22, D / 2],
+            [-W / 2, 0.22, D / 2],
+            [-W / 2, 0.22, -D / 2],
           ] as [number, number, number][]
         }
         color={P.primary}
         lineWidth={1.6}
+        depthWrite={false}
       />
 
       <group ref={shell} scale-y={0.0001}>
@@ -411,6 +425,43 @@ export function Building3D() {
         <mesh position={[0, 9.2, 0]} castShadow>
           <boxGeometry args={[GAP * 0.9, 18.4, D * 0.55]} />
           <meshStandardMaterial color={P.wallStone} roughness={0.85} />
+        </mesh>
+
+        {/* corner pilasters: vertical relief so the mass never reads as a flat slab */}
+        {[
+          [-W / 2, -D / 2],
+          [W / 2, -D / 2],
+          [W / 2, D / 2],
+          [-W / 2, D / 2],
+        ].map(([px, pz], i) => (
+          <mesh key={i} position={[px!, 9.4, pz!]} castShadow receiveShadow>
+            <boxGeometry args={[1.1, 18.8, 1.1]} />
+            <meshStandardMaterial color={P.wallStone} roughness={0.88} />
+          </mesh>
+        ))}
+
+        {/* plinth + entrance porch at street level */}
+        <mesh position={[0, 0.35, 0]} receiveShadow castShadow>
+          <boxGeometry args={[W + 1.6, 0.7, D + 1.6]} />
+          <meshStandardMaterial color={P.trim} roughness={0.95} />
+        </mesh>
+        <mesh position={[0, 1.5, D / 2 + 1.6]} castShadow receiveShadow>
+          <boxGeometry args={[5.4, 2.6, 2.4]} />
+          <meshStandardMaterial color={P.wallStone} roughness={0.85} />
+        </mesh>
+        <mesh position={[0, 1.3, D / 2 + 2.82]}>
+          <boxGeometry args={[3.2, 2.1, 0.12]} />
+          <meshStandardMaterial
+            color={P.windowGlass}
+            transparent
+            opacity={0.55}
+            roughness={0.15}
+            metalness={0.5}
+          />
+        </mesh>
+        <mesh position={[0, 2.95, D / 2 + 2.2]} castShadow>
+          <boxGeometry args={[6.6, 0.22, 3.6]} />
+          <meshStandardMaterial color={P.trim} roughness={0.9} />
         </mesh>
       </group>
     </group>
