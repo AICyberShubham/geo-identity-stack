@@ -18,8 +18,12 @@ const disableDevtoolsSourceInjection = (): Plugin => ({
   },
 });
 
+const isGitHubPages = process.env.GITHUB_PAGES === "true";
+const base = process.env.BASE_PATH || (isGitHubPages ? "/geo-identity-stack/" : "/");
+
 export default defineConfig({
   vite: {
+    base,
     plugins: [disableDevtoolsSourceInjection()],
   },
   tanstackStart: {
