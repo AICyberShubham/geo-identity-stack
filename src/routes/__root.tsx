@@ -9,7 +9,7 @@ import {
 } from "@tanstack/react-router";
 import type { ReactNode } from "react";
 
-import appCss from "../styles.css?url";
+import appCss from "../styles/globals.css?url";
 
 function NotFoundComponent() {
   return (

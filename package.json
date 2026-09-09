@@ -4,6 +4,23 @@
   "description": "BHU-3D: 3D ULPIN Generation & Vertical Property Mapping System (Smart India Hackathon)",
   "author": "BHU-3D Geospatial Team",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/AICyberShubham/geo-identity-stack.git"
+  },
+  "homepage": "https://aicybershubham.github.io/geo-identity-stack/",
+  "keywords": [
+    "sih",
+    "smart-india-hackathon",
+    "ulpin",
+    "3d-gis",
+    "threejs",
+    "react-three-fiber",
+    "cadastral-mapping",
+    "land-administration",
+    "vertical-property",
+    "geospatial"
+  ],
   "private": true,
   "sideEffects": false,
   "type": "module",
