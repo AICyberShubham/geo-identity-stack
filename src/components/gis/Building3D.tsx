@@ -137,13 +137,18 @@ function UnitVolume({
   useFrame((_, delta) => {
     if (!group.current) return;
     const k = 1 - Math.exp(-8 * Math.min(delta, 0.05));
-    const targetY = selected ? 2.1 : isHovered ? 0.45 : 0;
+    // slide the storey OUT of the stack instead of lifting it into the slab
+    // above — overlapping geometry was what caused the flicker on select
+    const targetZ = selected ? depth * 1.25 : isHovered ? 0.6 : 0;
+    const targetY = selected ? 0.9 : 0;
     const targetX = x + conflictShift;
     const targetS = view === "3d" ? 1 : 0.001;
     group.current.position.y += (targetY - group.current.position.y) * k;
+    group.current.position.z += (targetZ - group.current.position.z) * k;
     group.current.position.x += (targetX - group.current.position.x) * k;
     group.current.scale.y += (targetS - group.current.scale.y) * k;
   });
+
 
   const floorNo = parseInt(unit.floorId.replace(/\D/g, ""), 10) || 1;
   const wall = WALL_COLORS[floorNo % WALL_COLORS.length]!;
