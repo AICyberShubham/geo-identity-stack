@@ -52,6 +52,32 @@ async function main() {
     console.log(`Created GitHub Pages SPA fallback: 404.html`);
   }
 
+  // When building for GitHub Pages, sync built files to the repository root so
+  // repositories with "Deploy from a branch (main /root)" serve the real React/Vite app
+  if (process.env.GITHUB_PAGES === 'true') {
+    console.log('Syncing static build to repository root for GitHub Pages branch deployment...');
+    fs.copyFileSync(path.join(publicDir, 'index.html'), path.join(rootDir, 'index.html'));
+    fs.copyFileSync(path.join(publicDir, '404.html'), path.join(rootDir, '404.html'));
+    fs.copyFileSync(path.join(publicDir, '.nojekyll'), path.join(rootDir, '.nojekyll'));
+
+    const rootAppDir = path.join(rootDir, 'app');
+    fs.mkdirSync(rootAppDir, { recursive: true });
+    if (fs.existsSync(path.join(publicDir, 'app', 'index.html'))) {
+      fs.copyFileSync(path.join(publicDir, 'app', 'index.html'), path.join(rootAppDir, 'index.html'));
+    }
+
+    const publicAssetsDir = path.join(publicDir, 'assets');
+    const rootAssetsDir = path.join(rootDir, 'assets');
+    fs.mkdirSync(rootAssetsDir, { recursive: true });
+    if (fs.existsSync(publicAssetsDir)) {
+      const assetFiles = fs.readdirSync(publicAssetsDir);
+      for (const file of assetFiles) {
+        fs.copyFileSync(path.join(publicAssetsDir, file), path.join(rootAssetsDir, file));
+      }
+    }
+    console.log('Successfully synced build files to root for GitHub Pages!');
+  }
+
   console.log('Static export completed successfully!');
 }
 
