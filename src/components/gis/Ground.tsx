@@ -31,8 +31,7 @@ function ParcelOutline({
   y: number;
 }) {
   const pts = useMemo(
-    () =>
-      [...points, points[0]!].map((pt) => [pt[0], y, pt[1]] as [number, number, number]),
+    () => [...points, points[0]!].map((pt) => [pt[0], y, pt[1]] as [number, number, number]),
     [points, y],
   );
   return <Line points={pts} color={color} lineWidth={width} depthWrite={false} />;
@@ -97,21 +96,11 @@ function RoadSegment({
       {[-1, 1].map((s) => (
         <mesh
           key={s}
-          position={[
-            horizontal ? 0 : s * kerbOffset,
-            0.09,
-            horizontal ? s * kerbOffset : 0,
-          ]}
+          position={[horizontal ? 0 : s * kerbOffset, 0.09, horizontal ? s * kerbOffset : 0]}
           castShadow
           receiveShadow
         >
-          <boxGeometry
-            args={[
-              horizontal ? sx : 0.7,
-              0.18,
-              horizontal ? 0.7 : sz,
-            ]}
-          />
+          <boxGeometry args={[horizontal ? sx : 0.7, 0.18, horizontal ? 0.7 : sz]} />
           <meshStandardMaterial color={P.roadLine} roughness={0.9} transparent opacity={opacity} />
         </mesh>
       ))}

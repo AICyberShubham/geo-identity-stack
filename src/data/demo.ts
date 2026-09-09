@@ -308,8 +308,18 @@ export const RECENT_ACTIVITY = [
     kind: "conflict",
     time: "1 hr ago",
   },
-  { id: 5, text: "Underground asset UT-00982 mapped to parcel P123456", kind: "ug", time: "3 hr ago" },
-  { id: 6, text: "Verification batch closed for Ward 21 (412 units)", kind: "model", time: "5 hr ago" },
+  {
+    id: 5,
+    text: "Underground asset UT-00982 mapped to parcel P123456",
+    kind: "ug",
+    time: "3 hr ago",
+  },
+  {
+    id: 6,
+    text: "Verification batch closed for Ward 21 (412 units)",
+    kind: "model",
+    time: "5 hr ago",
+  },
 ];
 
 export const UNIT_GROWTH = [

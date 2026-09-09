@@ -149,7 +149,6 @@ function UnitVolume({
     group.current.scale.y += (targetS - group.current.scale.y) * k;
   });
 
-
   const floorNo = parseInt(unit.floorId.replace(/\D/g, ""), 10) || 1;
   const wall = WALL_COLORS[floorNo % WALL_COLORS.length]!;
   const color = conflictShift !== 0 ? P.danger : selected ? P.primary : wall;
@@ -185,7 +184,6 @@ function UnitVolume({
           emissive={selected ? P.primary : conflictShift !== 0 ? P.danger : "#000000"}
           emissiveIntensity={selected ? 0.18 : conflictShift !== 0 ? 0.35 : 0}
         />
-
       </mesh>
 
       {/* painted cornice band at the top of each storey */}
@@ -320,9 +318,7 @@ export function Building3D() {
                   >
                     <boxGeometry args={[W * 0.34, 1.8, D * 0.4]} />
                     <meshStandardMaterial
-                      color={
-                        selection.id === floor.units[0]!.id ? P.primary : P.wallStone
-                      }
+                      color={selection.id === floor.units[0]!.id ? P.primary : P.wallStone}
                       roughness={0.7}
                     />
                   </mesh>
@@ -351,11 +347,7 @@ export function Building3D() {
                     </mesh>
                   ))}
                   {[-1.4, 0, 1.4].map((s) => (
-                    <mesh
-                      key={s}
-                      position={[s * 2, floor.zMin + 0.55, -D * 0.3]}
-                      castShadow
-                    >
+                    <mesh key={s} position={[s * 2, floor.zMin + 0.55, -D * 0.3]} castShadow>
                       <boxGeometry args={[1.2, 0.8, 0.9]} />
                       <meshStandardMaterial color={P.railing} metalness={0.5} roughness={0.5} />
                     </mesh>
@@ -408,8 +400,7 @@ export function Building3D() {
                 <FloorSlab y={floor.zMin} />
                 {floor.units.map((u, i) => {
                   const x = i === 0 ? -(UNIT_W + GAP) / 2 : (UNIT_W + GAP) / 2;
-                  const shift =
-                    conflict && u.id === "F04-U06" ? -(UNIT_W * 0.34) : 0;
+                  const shift = conflict && u.id === "F04-U06" ? -(UNIT_W * 0.34) : 0;
                   return (
                     <UnitVolume
                       key={u.id}

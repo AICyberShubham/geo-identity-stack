@@ -1,13 +1,4 @@
-import {
-  BarChart3,
-  Building2,
-  LayoutGrid,
-  Layers3,
-  Map,
-  ShieldCheck,
-  Menu,
-  X,
-} from "lucide-react";
+import { BarChart3, Building2, LayoutGrid, Layers3, Map, ShieldCheck, Menu, X } from "lucide-react";
 import { useState } from "react";
 import type { NavItem } from "./TopBar";
 import { NAV_ITEMS } from "./TopBar";

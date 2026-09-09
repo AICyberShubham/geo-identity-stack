@@ -17,11 +17,15 @@ export function ConflictModal() {
         </div>
         <div className="mt-3 grid grid-cols-2 gap-x-4 gap-y-2 text-[12px]">
           <div>
-            <div className="text-[10px] uppercase tracking-wide text-muted-foreground">Conflict Type</div>
+            <div className="text-[10px] uppercase tracking-wide text-muted-foreground">
+              Conflict Type
+            </div>
             <div>{conflict.type}</div>
           </div>
           <div>
-            <div className="text-[10px] uppercase tracking-wide text-muted-foreground">Affected Units</div>
+            <div className="text-[10px] uppercase tracking-wide text-muted-foreground">
+              Affected Units
+            </div>
             <div className="tabular">{conflict.units.join("  /  ")}</div>
           </div>
           <div>
@@ -29,7 +33,9 @@ export function ConflictModal() {
             <div className="tabular">{conflict.overlap} m²</div>
           </div>
           <div>
-            <div className="text-[10px] uppercase tracking-wide text-muted-foreground">Severity</div>
+            <div className="text-[10px] uppercase tracking-wide text-muted-foreground">
+              Severity
+            </div>
             <div className="text-destructive">{conflict.severity}</div>
           </div>
           <div className="col-span-2">

@@ -68,15 +68,15 @@ Traditional cadastral systems map land parcels strictly on a two-dimensional pla
 
 ## 🛠️ Technology Stack
 
-| Layer | Technology |
-|---|---|
-| **Core Framework** | React 19, TypeScript, TanStack Start |
-| **Routing** | TanStack Router (file-based routing) |
+| Layer                    | Technology                                                                     |
+| ------------------------ | ------------------------------------------------------------------------------ |
+| **Core Framework**       | React 19, TypeScript, TanStack Start                                           |
+| **Routing**              | TanStack Router (file-based routing)                                           |
 | **3D GIS Visualization** | Three.js, React Three Fiber (`@react-three/fiber`), Drei (`@react-three/drei`) |
-| **Styling & Theme** | Tailwind CSS v4, High-density dark GIS interface |
-| **UI Components** | Radix UI primitives, Lucide React icons |
-| **Data Visualization** | Recharts (cadastral analytics & distributions) |
-| **Build & Tooling** | Vite 8, Nitro (server bundle) |
+| **Styling & Theme**      | Tailwind CSS v4, High-density dark GIS interface                               |
+| **UI Components**        | Radix UI primitives, Lucide React icons                                        |
+| **Data Visualization**   | Recharts (cadastral analytics & distributions)                                 |
+| **Build & Tooling**      | Vite 8, Nitro (server bundle)                                                  |
 
 ---
 
@@ -88,16 +88,16 @@ graph TD
     B --> C[3D Volumetric Extrusion]
     C --> D[Vertical Floor Segmentation]
     D --> E[Property Unit Modeling]
-    
+
     E --> F[3D ULPIN Generator]
     F --> G[Hierarchical Cadastral Identity]
-    
+
     E --> H[Spatial Validation Engine]
     H --> I[Overlap & Conflict Detection]
-    
+
     J[Subterranean Utility Data] --> K[Underground Asset Layer]
     K --> H
-    
+
     G --> L[Interactive 3D GIS Workspace]
     I --> L
     K --> L
@@ -162,12 +162,14 @@ geo-identity-stack/
 ### Installation
 
 1. Clone the repository:
+
    ```bash
    git clone <repository-url>
    cd geo-identity-stack
    ```
 
 2. Install dependencies:
+
    ```bash
    pnpm install
    # or
@@ -175,6 +177,7 @@ geo-identity-stack/
    ```
 
 3. Start the local development server:
+
    ```bash
    pnpm run dev
    # or

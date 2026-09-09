@@ -1,13 +1,5 @@
 import { createFileRoute, Link } from "@tanstack/react-router";
-import {
-  ArrowRight,
-  Boxes,
-  Building2,
-  Layers3,
-  ShieldCheck,
-  Fingerprint,
-  Map,
-} from "lucide-react";
+import { ArrowRight, Boxes, Building2, Layers3, ShieldCheck, Fingerprint, Map } from "lucide-react";
 
 export const Route = createFileRoute("/")({
   head: () => ({
@@ -66,8 +58,7 @@ function Landing() {
         </span>
 
         <h1 className="max-w-3xl text-4xl font-semibold leading-[1.08] tracking-tight md:text-6xl">
-          From 2D Land Parcels to{" "}
-          <span className="text-primary">3D Property Identity</span>
+          From 2D Land Parcels to <span className="text-primary">3D Property Identity</span>
         </h1>
 
         <p className="mt-5 max-w-2xl text-[15px] leading-relaxed text-muted-foreground">
@@ -126,8 +117,8 @@ function Landing() {
 
         <p className="mt-10 text-[11px] text-muted-foreground">
           Prototype uses synthetic demonstration data. The 3D identifier shown is a{" "}
-          <span className="text-accent">proposed 3D ULPIN extension</span>, not an officially adopted
-          Government of India format.
+          <span className="text-accent">proposed 3D ULPIN extension</span>, not an officially
+          adopted Government of India format.
         </p>
       </section>
     </main>

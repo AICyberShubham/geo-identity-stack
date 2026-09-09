@@ -9,7 +9,15 @@ import {
   TrendingUp,
   Cuboid,
 } from "lucide-react";
-import { Area, AreaChart, CartesianGrid, ResponsiveContainer, Tooltip, XAxis, YAxis } from "recharts";
+import {
+  Area,
+  AreaChart,
+  CartesianGrid,
+  ResponsiveContainer,
+  Tooltip,
+  XAxis,
+  YAxis,
+} from "recharts";
 import { OVERVIEW_STATS, RECENT_ACTIVITY, UNIT_GROWTH } from "@/data/demo";
 import { cn } from "@/lib/utils";
 
@@ -91,8 +99,18 @@ export function Overview() {
                   </linearGradient>
                 </defs>
                 <CartesianGrid stroke="var(--color-border)" vertical={false} />
-                <XAxis dataKey="month" stroke="var(--color-muted-foreground)" fontSize={11} tickLine={false} />
-                <YAxis stroke="var(--color-muted-foreground)" fontSize={11} tickLine={false} width={44} />
+                <XAxis
+                  dataKey="month"
+                  stroke="var(--color-muted-foreground)"
+                  fontSize={11}
+                  tickLine={false}
+                />
+                <YAxis
+                  stroke="var(--color-muted-foreground)"
+                  fontSize={11}
+                  tickLine={false}
+                  width={44}
+                />
                 <Tooltip
                   contentStyle={{
                     background: "var(--color-popover)",
@@ -127,7 +145,10 @@ export function Overview() {
           </div>
           <ul className="space-y-2.5">
             {RECENT_ACTIVITY.map((a) => (
-              <li key={a.id} className="flex gap-2.5 border-b border-border/60 pb-2.5 last:border-0">
+              <li
+                key={a.id}
+                className="flex gap-2.5 border-b border-border/60 pb-2.5 last:border-0"
+              >
                 <span
                   className={cn(
                     "mt-1.5 size-1.5 shrink-0 rounded-full bg-current",

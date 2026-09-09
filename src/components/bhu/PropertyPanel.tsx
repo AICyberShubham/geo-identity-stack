@@ -1,15 +1,42 @@
-import { ArrowDown, BadgeCheck, Copy, Cuboid, Layers3, MousePointerClick, Sparkles } from "lucide-react";
+import {
+  ArrowDown,
+  BadgeCheck,
+  Copy,
+  Cuboid,
+  Layers3,
+  MousePointerClick,
+  Sparkles,
+} from "lucide-react";
 import { useEffect, useState } from "react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { Badge } from "@/components/ui/badge";
 import { Separator } from "@/components/ui/separator";
-import { ALL_UNITS, DISTRICT, DISTRICT_CODE, FLOORS, PRIMARY_PARCEL, STATE, STATE_CODE, floorCode } from "@/data/demo";
+import {
+  ALL_UNITS,
+  DISTRICT,
+  DISTRICT_CODE,
+  FLOORS,
+  PRIMARY_PARCEL,
+  STATE,
+  STATE_CODE,
+  floorCode,
+} from "@/data/demo";
 import { UNDERGROUND_ASSETS } from "@/data/demo";
 import { useBhu } from "@/state/bhu";
 import { cn } from "@/lib/utils";
 
-function Row({ label, value, mono = true, accent }: { label: string; value: string; mono?: boolean; accent?: boolean }) {
+function Row({
+  label,
+  value,
+  mono = true,
+  accent,
+}: {
+  label: string;
+  value: string;
+  mono?: boolean;
+  accent?: boolean;
+}) {
   return (
     <div className="flex items-start justify-between gap-3 py-1.5">
       <span className="text-[11px] uppercase tracking-wide text-muted-foreground">{label}</span>
@@ -72,10 +99,13 @@ function UlpinGenerator({
     chain.forEach((_, i) => {
       window.setTimeout(() => setStep(i + 1), 220 * (i + 1));
     });
-    window.setTimeout(() => {
-      addGeneratedUlpin(target);
-      toast.success("3D ULPIN generated", { description: target });
-    }, 220 * chain.length + 120);
+    window.setTimeout(
+      () => {
+        addGeneratedUlpin(target);
+        toast.success("3D ULPIN generated", { description: target });
+      },
+      220 * chain.length + 120,
+    );
   }
 
   return (

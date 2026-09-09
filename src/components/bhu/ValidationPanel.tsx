@@ -1,4 +1,11 @@
-import { AlertTriangle, CheckCircle2, Loader2, ShieldCheck, TriangleAlert, Wrench } from "lucide-react";
+import {
+  AlertTriangle,
+  CheckCircle2,
+  Loader2,
+  ShieldCheck,
+  TriangleAlert,
+  Wrench,
+} from "lucide-react";
 import { toast } from "sonner";
 import { Button } from "@/components/ui/button";
 import { BASE_CHECKS } from "@/data/demo";
@@ -26,14 +33,18 @@ export function ValidationPanel() {
     const failing = !!conflict;
     setChecks(BASE_CHECKS.map((c) => ({ ...c, state: "running" })));
     BASE_CHECKS.forEach((c, i) => {
-      window.setTimeout(() => {
-        setChecksAt(i, failing && c.id === "overlap" ? "fail" : "pass");
-      }, 320 * (i + 1));
+      window.setTimeout(
+        () => {
+          setChecksAt(i, failing && c.id === "overlap" ? "fail" : "pass");
+        },
+        320 * (i + 1),
+      );
     });
     window.setTimeout(
       () => {
         setValidatedAt(new Date().toLocaleTimeString("en-IN", { hour12: false }));
-        if (failing) toast.error("Spatial validation failed", { description: "1 topology conflict detected" });
+        if (failing)
+          toast.error("Spatial validation failed", { description: "1 topology conflict detected" });
         else toast.success("All spatial checks passed", { description: "14 volumes validated" });
       },
       320 * BASE_CHECKS.length + 150,
@@ -44,7 +55,14 @@ export function ValidationPanel() {
     setChecks(
       BASE_CHECKS.map((c, i) => ({
         ...c,
-        state: i < index ? (conflict && c.id === "overlap" ? "fail" : "pass") : i === index ? state : "running",
+        state:
+          i < index
+            ? conflict && c.id === "overlap"
+              ? "fail"
+              : "pass"
+            : i === index
+              ? state
+              : "running",
       })),
     );
   }
@@ -53,7 +71,11 @@ export function ValidationPanel() {
     <div className="flex flex-wrap items-center gap-x-4 gap-y-2 border-t border-border bg-surface/80 px-3 py-2 backdrop-blur">
       <div className="flex items-center gap-2">
         <Button size="sm" className="h-8 text-[12px]" onClick={runValidation} disabled={running}>
-          {running ? <Loader2 className="size-3.5 animate-spin" /> : <ShieldCheck className="size-3.5" />}
+          {running ? (
+            <Loader2 className="size-3.5 animate-spin" />
+          ) : (
+            <ShieldCheck className="size-3.5" />
+          )}
           Run Spatial Validation
         </Button>
         {conflict ? (
@@ -79,7 +101,9 @@ export function ValidationPanel() {
               setView("3d");
               simulateConflict();
               select({ kind: "unit", id: "F04-U05" });
-              setChecks(BASE_CHECKS.map((c) => ({ ...c, state: c.id === "overlap" ? "fail" : "pass" })));
+              setChecks(
+                BASE_CHECKS.map((c) => ({ ...c, state: c.id === "overlap" ? "fail" : "pass" })),
+              );
               toast.error("SPATIAL CONFLICT DETECTED", {
                 description: "Vertical volume overlap · F04-U05 / F04-U06",
               });
@@ -100,7 +124,10 @@ export function ValidationPanel() {
               <AlertTriangle className="size-3.5 text-destructive" />
             ) : (
               <CheckCircle2
-                className={cn("size-3.5", c.state === "pass" ? "text-success" : "text-muted-foreground/40")}
+                className={cn(
+                  "size-3.5",
+                  c.state === "pass" ? "text-success" : "text-muted-foreground/40",
+                )}
               />
             )}
             <span

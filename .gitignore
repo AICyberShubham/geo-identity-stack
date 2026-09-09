@@ -16,6 +16,13 @@ dist-ssr
 .nitro
 *.local
 
+# Static build exports (keep main branch clean)
+/index.html
+/404.html
+/.nojekyll
+/app/
+/assets/
+
 # Wrangler / Cloudflare
 .wrangler/
 .dev.vars

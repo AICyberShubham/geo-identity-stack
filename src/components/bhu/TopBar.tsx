@@ -43,15 +43,11 @@ export function TopBar({
             onClick={() => onNavigate(item)}
             className={cn(
               "relative whitespace-nowrap px-3 py-2 text-[12.5px] font-medium transition-colors",
-              active === item
-                ? "text-primary"
-                : "text-muted-foreground hover:text-foreground",
+              active === item ? "text-primary" : "text-muted-foreground hover:text-foreground",
             )}
           >
             {item}
-            {active === item && (
-              <span className="absolute inset-x-2 -bottom-px h-px bg-primary" />
-            )}
+            {active === item && <span className="absolute inset-x-2 -bottom-px h-px bg-primary" />}
           </button>
         ))}
       </nav>

@@ -1,11 +1,15 @@
 {
-  "name": "tanstack_start_ts",
+  "name": "bhu-3d",
+  "version": "1.0.0",
+  "description": "BHU-3D: 3D ULPIN Generation & Vertical Property Mapping System (Smart India Hackathon)",
+  "author": "BHU-3D Geospatial Team",
+  "license": "MIT",
   "private": true,
   "sideEffects": false,
   "type": "module",
   "scripts": {
     "dev": "vite dev",
-    "build": "node scripts/clean-root.mjs && vite build && node scripts/generate-static.mjs",
+    "build": "vite build && node scripts/generate-static.mjs",
     "build:dev": "vite build --mode development",
     "preview": "vite preview",
     "lint": "eslint .",

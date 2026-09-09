@@ -17,7 +17,7 @@ const PRESETS: Record<"reset" | "top" | "side" | "iso", [number, number, number]
 };
 
 function CameraRig() {
-  const controls = useRef<any>(null);
+  const controls = useRef<React.ComponentRef<typeof OrbitControls>>(null);
   const { camera } = useThree();
   const { cameraPreset, focus, view } = useBhu();
   const desiredPos = useRef(new THREE.Vector3(...PRESETS.reset));
@@ -49,7 +49,11 @@ function CameraRig() {
     if (!focus) return;
     const [x, y, z] = focus.target;
     desiredTarget.current.set(x, y, z);
-    desiredPos.current.set(x + focus.distance * 0.7, y + focus.distance * 0.55, z + focus.distance * 0.8);
+    desiredPos.current.set(
+      x + focus.distance * 0.7,
+      y + focus.distance * 0.55,
+      z + focus.distance * 0.8,
+    );
     animating.current = true;
   }, [focus]);
 

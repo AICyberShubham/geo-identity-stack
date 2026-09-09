@@ -1,4 +1,4 @@
-name: Deploy to GitHub Pages
+name: Deploy BHU-3D to GitHub Pages
 
 on:
   push:
@@ -6,7 +6,7 @@ on:
   workflow_dispatch:
 
 permissions:
-  contents: read
+  contents: write
   pages: write
   id-token: write
 
@@ -50,6 +50,13 @@ jobs:
         with:
           path: .output/public
 
-      - name: Deploy to GitHub Pages
+      - name: Deploy to GitHub Pages (Actions native)
         id: deployment
         uses: actions/deploy-pages@v4
+        continue-on-error: true
+
+      - name: Deploy to gh-pages branch (Branch deployment fallback)
+        uses: peaceiris/actions-gh-pages@v4
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          publish_dir: .output/public
