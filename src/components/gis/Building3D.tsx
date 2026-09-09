@@ -183,10 +183,9 @@ function UnitVolume({
           roughness={0.85}
           metalness={0.04}
           emissive={selected ? P.primary : conflictShift !== 0 ? P.danger : "#000000"}
-          emissiveIntensity={selected ? 0.22 : conflictShift !== 0 ? 0.4 : 0}
-          transparent
-          opacity={isHovered && !selected ? 0.97 : 1}
+          emissiveIntensity={selected ? 0.18 : conflictShift !== 0 ? 0.35 : 0}
         />
+
       </mesh>
 
       {/* painted cornice band at the top of each storey */}
